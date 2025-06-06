@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -5,6 +6,7 @@ import type { WorkExperienceEntry } from '@/lib/types';
 import { InputField, TextAreaField, ArrayEntryField } from '@/components/form-elements';
 import { ResumeFormSection } from '@/components/resume-form-section';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input'; // Added import
 import { Briefcase, PlusCircle, Trash2 } from 'lucide-react';
 
 interface WorkExperienceSectionProps {
@@ -161,3 +163,4 @@ export function WorkExperienceSection({ data, onChange }: WorkExperienceSectionP
     </ResumeFormSection>
   );
 }
+
