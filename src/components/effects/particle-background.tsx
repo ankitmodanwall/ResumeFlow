@@ -27,7 +27,7 @@ export function ParticleBackground() {
     const defs: ParticleDefinition[] = Array.from({ length: NUM_PARTICLES }).map((_, index) => {
       const size = getRandom(4, 16);
       return {
-        id: `particle-${index}-${crypto.randomUUID()}`, // crypto.randomUUID is client-side
+        id: `particle-${index}-${crypto.randomUUID()}`, 
         initialLeft: `${getRandom(0, 100)}vw`,
         initialWidth: `${size}px`,
         initialHeight: `${size}px`,
@@ -38,33 +38,37 @@ export function ParticleBackground() {
       };
     });
     setParticleDefs(defs);
-  }, []); // Empty dependency array ensures this runs once on mount
+  }, []); 
 
   const springs = useSprings(
     NUM_PARTICLES,
     i => {
       if (!particleDefs || !particleDefs[i]) {
-        // Return a default, non-visible, or non-animating state if definitions are not ready
         return {
           from: { opacity: 0, y: 20, rotate: 0 },
-          to: { opacity: 0, y: 20, rotate: 0 },
+          to: async (next: any) => { // Ensure 'to' is a function or array if multi-stage
+            await next({ opacity: 0, y: 20, rotate: 0 });
+          },
           config: { duration: 1 },
-          reset: true, // Ensures spring updates when real definitions arrive
+          reset: true,
         };
       }
 
       const def = particleDefs[i];
       return {
-        from: { opacity: 0, y: 20, rotate: 0 }, // y in vh, rotate in deg
-        to: { opacity: [0, 1, 0.8, 0], y: def.targetY, rotate: def.targetRotate },
-        config: { duration: def.duration, easing: (t: number) => t }, // Linear easing
+        from: { opacity: 0, y: 20, rotate: 0 }, 
+        to: async (next: any) => {
+          await next({ opacity: 1, y: def.targetY / 2, rotate: def.targetRotate / 2 }); // Example of multi-stage
+          await next({ opacity: 0.8, y: def.targetY * 0.8, rotate: def.targetRotate * 0.8 });
+          await next({ opacity: 0, y: def.targetY, rotate: def.targetRotate });
+        },
+        config: { duration: def.duration, easing: (t: number) => t }, 
         delay: def.startDelay,
         loop: { reset: true },
       };
     }
   );
 
-  // Render nothing until particle definitions are generated on the client
   if (!particleDefs) {
     return <div aria-hidden="true" className="animated-bg-particles"></div>;
   }
@@ -73,20 +77,19 @@ export function ParticleBackground() {
     <div aria-hidden="true" className="animated-bg-particles">
       {springs.map((animatedStyleProps, i) => {
         const def = particleDefs[i];
-        // This check should ideally not be necessary if !particleDefs above handles it,
-        // but as a safeguard:
-        if (!def) return null; 
+        if (!def || !animatedStyleProps || !animatedStyleProps.y || !animatedStyleProps.rotate) {
+            // If spring props or definitions are somehow not ready for this particle, skip rendering it.
+            return null; 
+        }
 
         return (
           <animated.span
-            key={def.id} // Use stable, unique ID
+            key={def.id} 
             className="particle-react-spring"
             style={{
-              // Static styles from our client-generated definition
               left: def.initialLeft,
               width: def.initialWidth,
               height: def.initialHeight,
-              // Animated styles from react-spring
               opacity: animatedStyleProps.opacity,
               transform: animatedStyleProps.y.to(
                 (yValue) => `translateY(${yValue}vh) rotate(${animatedStyleProps.rotate.get()}deg)`
@@ -98,3 +101,4 @@ export function ParticleBackground() {
     </div>
   );
 }
+
