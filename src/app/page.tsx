@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -23,41 +24,111 @@ import { AdditionalOptionsSection } from '@/components/resume-form/additional-op
 // Preview Component
 import { ResumePreview } from '@/components/resume-preview/resume-preview';
 
+// Sanitizer functions for data loaded from localStorage
+const sanitizeWorkExperienceEntry = (item: any): WorkExperienceEntry => ({
+  id: (item?.id && typeof item.id === 'string') ? item.id : crypto.randomUUID(),
+  jobTitle: typeof item?.jobTitle === 'string' ? item.jobTitle : '',
+  companyName: typeof item?.companyName === 'string' ? item.companyName : '',
+  location: typeof item?.location === 'string' ? item.location : '',
+  startDate: typeof item?.startDate === 'string' ? item.startDate : '',
+  endDate: typeof item?.endDate === 'string' ? item.endDate : '',
+  responsibilities: (Array.isArray(item?.responsibilities)
+    ? item.responsibilities.filter((r: any): r is string => typeof r === 'string')
+    : ['']
+  ).map(r => r || ''), // Ensure empty strings if null/undefined was in array
+});
+
+const sanitizeEducationEntry = (item: any): EducationEntry => ({
+  id: (item?.id && typeof item.id === 'string') ? item.id : crypto.randomUUID(),
+  degreeTitle: typeof item?.degreeTitle === 'string' ? item.degreeTitle : '',
+  universityName: typeof item?.universityName === 'string' ? item.universityName : '',
+  graduationYear: typeof item?.graduationYear === 'string' ? item.graduationYear : '',
+  gpa: typeof item?.gpa === 'string' ? item.gpa : '',
+});
+
+const sanitizeCertificationEntry = (item: any): CertificationEntry => ({
+  id: (item?.id && typeof item.id === 'string') ? item.id : crypto.randomUUID(),
+  name: typeof item?.name === 'string' ? item.name : '',
+  issuedBy: typeof item?.issuedBy === 'string' ? item.issuedBy : '',
+  completionDate: typeof item?.completionDate === 'string' ? item.completionDate : '',
+});
+
+const sanitizeProjectEntry = (item: any): ProjectEntry => ({
+  id: (item?.id && typeof item.id === 'string') ? item.id : crypto.randomUUID(),
+  title: typeof item?.title === 'string' ? item.title : '',
+  technologies: typeof item?.technologies === 'string' ? item.technologies : '',
+  description: typeof item?.description === 'string' ? item.description : '',
+  link: typeof item?.link === 'string' ? item.link : '',
+});
+
+const sanitizeAwardEntry = (item: any): AwardEntry => ({
+  id: (item?.id && typeof item.id === 'string') ? item.id : crypto.randomUUID(),
+  name: typeof item?.name === 'string' ? item.name : '',
+  date: typeof item?.date === 'string' ? item.date : '',
+  description: typeof item?.description === 'string' ? item.description : '',
+});
+
+const sanitizeLanguageEntry = (item: any): LanguageEntry => ({
+  id: (item?.id && typeof item.id === 'string') ? item.id : crypto.randomUUID(),
+  language: typeof item?.language === 'string' ? item.language : '',
+  proficiency: typeof item?.proficiency === 'string' ? item.proficiency : '',
+});
+
+
 export default function ResumeBuilderPage() {
   const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
-    // Load data from localStorage if available
     const savedData = localStorage.getItem('resumeFlowData');
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
-        // Ensure loaded data structure matches, especially for arrays
-        const validatedData = {
+        
+        const validatedData: ResumeData = {
           ...initialResumeData,
           ...parsedData,
-          personalInfo: { ...initialResumeData.personalInfo, ...parsedData.personalInfo },
-          workExperience: Array.isArray(parsedData.workExperience) ? parsedData.workExperience : [],
-          education: Array.isArray(parsedData.education) ? parsedData.education : [],
-          certifications: Array.isArray(parsedData.certifications) ? parsedData.certifications : [],
-          projects: Array.isArray(parsedData.projects) ? parsedData.projects : [],
-          awards: Array.isArray(parsedData.awards) ? parsedData.awards : [],
-          languages: Array.isArray(parsedData.languages) ? parsedData.languages : [],
-          additionalOptions: { ...initialResumeData.additionalOptions, ...parsedData.additionalOptions },
+          personalInfo: { 
+            ...initialResumeData.personalInfo, 
+            ...(parsedData.personalInfo && typeof parsedData.personalInfo === 'object' ? parsedData.personalInfo : {}) 
+          },
+          workExperience: (Array.isArray(parsedData.workExperience) ? parsedData.workExperience : [])
+            .filter((item: any): item is Partial<WorkExperienceEntry> => item && typeof item === 'object')
+            .map(sanitizeWorkExperienceEntry),
+          education: (Array.isArray(parsedData.education) ? parsedData.education : [])
+            .filter((item: any): item is Partial<EducationEntry> => item && typeof item === 'object')
+            .map(sanitizeEducationEntry),
+          certifications: (Array.isArray(parsedData.certifications) ? parsedData.certifications : [])
+            .filter((item: any): item is Partial<CertificationEntry> => item && typeof item === 'object')
+            .map(sanitizeCertificationEntry),
+          projects: (Array.isArray(parsedData.projects) ? parsedData.projects : [])
+            .filter((item: any): item is Partial<ProjectEntry> => item && typeof item === 'object')
+            .map(sanitizeProjectEntry),
+          awards: (Array.isArray(parsedData.awards) ? parsedData.awards : [])
+            .filter((item: any): item is Partial<AwardEntry> => item && typeof item === 'object')
+            .map(sanitizeAwardEntry),
+          languages: (Array.isArray(parsedData.languages) ? parsedData.languages : [])
+            .filter((item: any): item is Partial<LanguageEntry> => item && typeof item === 'object')
+            .map(sanitizeLanguageEntry),
+          skills: typeof parsedData.skills === 'string' ? parsedData.skills : initialResumeData.skills,
+          careerObjective: typeof parsedData.careerObjective === 'string' ? parsedData.careerObjective : initialResumeData.careerObjective,
+          keywords: typeof parsedData.keywords === 'string' ? parsedData.keywords : initialResumeData.keywords,
+          additionalOptions: { 
+            ...initialResumeData.additionalOptions, 
+            ...(parsedData.additionalOptions && typeof parsedData.additionalOptions === 'object' ? parsedData.additionalOptions : {}) 
+          },
         };
         setResumeData(validatedData);
       } catch (error) {
         console.error("Failed to parse saved resume data:", error);
-        localStorage.removeItem('resumeFlowData'); // Clear corrupted data
+        localStorage.removeItem('resumeFlowData'); 
       }
     }
-  }, []);
+  }, []); // Empty dependency array, runs once on mount client-side
 
   useEffect(() => {
     if(isClient) {
-      // Save data to localStorage on change
       localStorage.setItem('resumeFlowData', JSON.stringify(resumeData));
     }
   }, [resumeData, isClient]);
@@ -82,7 +153,6 @@ export default function ResumeBuilderPage() {
 
 
   if (!isClient) {
-    // Basic loading state or return null to prevent SSR issues with localStorage/useState
     return <div className="flex items-center justify-center min-h-screen">Loading ResumeFlow...</div>;
   }
 
@@ -131,3 +201,4 @@ export default function ResumeBuilderPage() {
     </div>
   );
 }
+
