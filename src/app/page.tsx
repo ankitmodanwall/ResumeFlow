@@ -213,8 +213,7 @@ export default function ResumeBuilderPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground text-sm">
           <p>&copy; {currentYear || new Date().getFullYear()} ResumeFlow. All rights reserved.</p>
           <p className="flex items-center justify-center mt-1">
-            Made with <Heart className="h-4 w-4 mx-1 text-red-500 fill-current" /> by Your Name/Company
-          </p>
+            Made with  <Heart className="h-4 w-4 mx-1 text-red-500 fill-current" /> Ankit Modanwal  </p>
         </div>
       </footer>
     </div>

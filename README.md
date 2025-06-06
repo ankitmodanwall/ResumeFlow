@@ -1,5 +1,11 @@
-# Firebase Studio
+# Resumeflow
+ ## Tools 
+ - gemini api key 
+ - next js 
+ - node js
+ - tailwind 
 
-This is a NextJS starter in Firebase Studio.
+## Keep contribute 
 
-To get started, take a look at src/app/page.tsx.
+
+
