@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -91,7 +92,7 @@ body {
   }
 }
 
-/* Animated Background Particles */
+/* Animated Background Particles Container */
 .animated-bg-particles {
   position: fixed;
   top: 0;
@@ -103,29 +104,21 @@ body {
   overflow: hidden; /* Particles should not cause scrollbars */
 }
 
-.animated-bg-particles span {
+/* Styles for react-spring controlled particles */
+.particle-react-spring {
   position: absolute;
   display: block;
   border-radius: 50%; /* Makes them circular */
   /* Color for light theme particles, using accent with alpha */
-  background-color: hsl(var(--accent) / 0.35); /* Increased opacity */
-  animation: animateParticles 25s linear infinite;
-  bottom: -50px; /* Start just below the viewport */
+  background-color: hsl(var(--accent) / 0.45); /* Increased opacity */
+  /* transform and opacity are controlled by react-spring */
+  will-change: transform, opacity; /* Performance hint for the browser */
 }
 
 /* Color for dark theme particles, using muted with alpha for better subtlety */
-.dark .animated-bg-particles span {
+.dark .particle-react-spring {
   background-color: hsl(var(--muted) / 0.45); /* Increased opacity */
 }
 
-@keyframes animateParticles {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1; /* Start fully visible (respecting the background-color alpha) */
-  }
-  100% {
-    transform: translateY(calc(-100vh - 50px)) rotate(360deg); /* Move upwards past the viewport */
-    opacity: 0; /* Fade out completely */
-  }
-}
-
+/* CSS animation keyframes and direct animation properties are removed as react-spring handles it */
+/* The old .animated-bg-particles span {} and @keyframes animateParticles {} are no longer needed for react-spring version */
