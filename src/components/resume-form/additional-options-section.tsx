@@ -170,6 +170,14 @@ const generateBasicDocHtml = (data: ResumeData): string => {
       </div>`;
   }
 
+  if (data.additionalOptions.addCoverLetter) {
+    html += `
+      <div class="section">
+        <h2>Cover Letter</h2>
+        <p>[Cover letter content would appear here if generated. This feature is currently a placeholder.]</p>
+      </div>`;
+  }
+
   html += `</body></html>`;
   return html;
 };
@@ -250,7 +258,7 @@ export function AdditionalOptionsSection({ options, resumeData, onChange }: Addi
     } else if (options.exportFormat === 'DOCX') {
       try {
         const htmlContent = generateBasicDocHtml(resumeData);
-        const blob = new Blob([htmlContent], { type: 'application/msword' }); // 'text/html' or 'application/msword' for .doc
+        const blob = new Blob([htmlContent], { type: 'application/msword' }); 
         
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
@@ -340,3 +348,4 @@ export function AdditionalOptionsSection({ options, resumeData, onChange }: Addi
     </ResumeFormSection>
   );
 }
+
