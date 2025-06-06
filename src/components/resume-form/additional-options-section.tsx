@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Switch } from '@/components/ui/switch';
 import { Settings } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
