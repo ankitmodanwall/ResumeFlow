@@ -190,9 +190,9 @@ export default function ResumeBuilderPage() {
               <LanguagesSection data={resumeData.languages} onChange={(val) => handleSimpleChange('languages', val as LanguageEntry[])} />
               <KeywordsSection resumeData={resumeData} onChange={(val) => handleSimpleChange('keywords', val)} />
               <AdditionalOptionsSection 
-                data={resumeData.additionalOptions} 
-                onChange={handleAdditionalOptionsChange} 
-                fullName={resumeData.personalInfo.fullName}
+                options={resumeData.additionalOptions} 
+                resumeData={resumeData}
+                onChange={handleAdditionalOptionsChange}
               />
             </div>
           </ScrollArea>
