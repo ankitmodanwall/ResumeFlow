@@ -6,7 +6,7 @@ import type { ResumeData, PersonalInfo, WorkExperienceEntry, EducationEntry, Cer
 import { initialResumeData } from '@/lib/types';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard } from 'lucide-react'; // App Icon
+import { LayoutDashboard, Heart } from 'lucide-react'; // App Icon, Heart for footer
 import { ThemeToggleButton } from '@/components/theme-toggle-button';
 
 // Form Section Components
@@ -79,9 +79,11 @@ const sanitizeLanguageEntry = (item: any): LanguageEntry => ({
 export default function ResumeBuilderPage() {
   const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
   const [isClient, setIsClient] = useState(false);
+  const [currentYear, setCurrentYear] = useState<number | null>(null);
 
   useEffect(() => {
     setIsClient(true);
+    setCurrentYear(new Date().getFullYear());
     const savedData = localStorage.getItem('resumeFlowData');
     if (savedData) {
       try {
@@ -206,6 +208,16 @@ export default function ResumeBuilderPage() {
           </div>
         </div>
       </main>
+
+      <footer className="bg-card border-t py-6">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground text-sm">
+          <p>&copy; {currentYear || new Date().getFullYear()} ResumeFlow. All rights reserved.</p>
+          <p className="flex items-center justify-center mt-1">
+            Made with <Heart className="h-4 w-4 mx-1 text-red-500 fill-current" /> by Your Name/Company
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
+
