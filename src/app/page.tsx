@@ -7,6 +7,7 @@ import { initialResumeData } from '@/lib/types';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { LayoutDashboard } from 'lucide-react'; // App Icon
+import { ThemeToggleButton } from '@/components/theme-toggle-button';
 
 // Form Section Components
 import { PersonalInfoSection } from '@/components/resume-form/personal-info-section';
@@ -164,14 +165,17 @@ export default function ResumeBuilderPage() {
             <LayoutDashboard className="h-7 w-7 text-primary" />
             <h1 className="text-2xl font-bold font-headline text-primary">ResumeFlow</h1>
           </div>
-          <Button variant="outline" onClick={() => {
-            if (confirm("Are you sure you want to reset all data? This cannot be undone.")) {
-              setResumeData(initialResumeData);
-              localStorage.removeItem('resumeFlowData');
-            }
-          }}>
-            Reset Data
-          </Button>
+          <div className="flex items-center space-x-2">
+            <ThemeToggleButton />
+            <Button variant="outline" onClick={() => {
+              if (confirm("Are you sure you want to reset all data? This cannot be undone.")) {
+                setResumeData(initialResumeData);
+                localStorage.removeItem('resumeFlowData');
+              }
+            }}>
+              Reset Data
+            </Button>
+          </div>
         </div>
       </header>
 
