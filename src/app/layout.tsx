@@ -1,6 +1,8 @@
+
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
+import { ParticleBackground } from '@/components/effects/particle-background';
 
 export const metadata: Metadata = {
   title: 'ResumeFlow - Build Your Professional Resume',
@@ -21,6 +23,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
+        <ParticleBackground />
         {children}
         <Toaster />
       </body>

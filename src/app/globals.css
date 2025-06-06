@@ -84,8 +84,47 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    position: relative; /* Needed for z-indexed children like the particle container */
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-headline;
+  }
+}
+
+/* Animated Background Particles */
+.animated-bg-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1; /* Behind all content */
+  pointer-events: none; /* Does not interfere with mouse events */
+  overflow: hidden; /* Particles should not cause scrollbars */
+}
+
+.animated-bg-particles span {
+  position: absolute;
+  display: block;
+  border-radius: 50%; /* Makes them circular */
+  /* Color for light theme particles, using accent with alpha */
+  background-color: hsl(var(--accent) / 0.15);
+  animation: animateParticles 25s linear infinite;
+  bottom: -50px; /* Start just below the viewport */
+}
+
+/* Color for dark theme particles, using muted with alpha for better subtlety */
+.dark .animated-bg-particles span {
+  background-color: hsl(var(--muted) / 0.2);
+}
+
+@keyframes animateParticles {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1; /* Start fully visible (respecting the background-color alpha) */
+  }
+  100% {
+    transform: translateY(calc(-100vh - 50px)) rotate(360deg); /* Move upwards past the viewport */
+    opacity: 0; /* Fade out completely */
   }
 }
