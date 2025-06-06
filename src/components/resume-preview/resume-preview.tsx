@@ -1,3 +1,4 @@
+
 "use client";
 
 import type React from 'react';
@@ -60,7 +61,7 @@ const MinimalTemplate = ({ data }: { data: ResumeData }) => (
     )}
 
     {/* Add other sections (Certifications, Projects, etc.) similarly */}
-    <p className="text-center text-xs mt-6 text-gray-400">Minimal Template</p>
+    <p className="text-center text-xs mt-6 text-gray-400 print-hide">Minimal Template</p>
   </div>
 );
 
@@ -127,7 +128,7 @@ const ModernTemplate = ({ data }: { data: ResumeData }) => (
       </section>
     )}
 
-    <p className="text-center text-xs mt-8 text-gray-400">Modern Template</p>
+    <p className="text-center text-xs mt-8 text-gray-400 print-hide">Modern Template</p>
   </div>
 );
 
@@ -186,7 +187,7 @@ const ClassicTemplate = ({ data }: { data: ResumeData }) => (
         ))}
       </section>
     )}
-    <p className="text-center text-xs mt-6 text-gray-400">Classic Template</p>
+    <p className="text-center text-xs mt-6 text-gray-400 print-hide">Classic Template</p>
   </div>
 );
 
@@ -220,7 +221,7 @@ export function ResumePreview({ data, template }: ResumePreviewProps) {
       </CardHeader>
       <CardContent className="flex-grow overflow-hidden p-0">
         <ScrollArea className="h-full w-full p-4 bg-muted/50">
-            <div className="max-w-[210mm] mx-auto bg-white shadow-lg print:shadow-none" style={{ minHeight: '297mm' }}> {/* A4-like aspect ratio */}
+            <div id="printable-resume-area" className="max-w-[210mm] mx-auto bg-white shadow-lg print:shadow-none" style={{ minHeight: '297mm' }}> {/* A4-like aspect ratio */}
                  {renderTemplate()}
             </div>
         </ScrollArea>

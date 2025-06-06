@@ -35,7 +35,7 @@ const sanitizeWorkExperienceEntry = (item: any): WorkExperienceEntry => ({
   responsibilities: (Array.isArray(item?.responsibilities)
     ? item.responsibilities.filter((r: any): r is string => typeof r === 'string')
     : ['']
-  ).map(r => r || ''), // Ensure empty strings if null/undefined was in array
+  ).map(r => r || ''),
 });
 
 const sanitizeEducationEntry = (item: any): EducationEntry => ({
@@ -125,7 +125,7 @@ export default function ResumeBuilderPage() {
         localStorage.removeItem('resumeFlowData'); 
       }
     }
-  }, []); // Empty dependency array, runs once on mount client-side
+  }, []); 
 
   useEffect(() => {
     if(isClient) {
@@ -189,7 +189,11 @@ export default function ResumeBuilderPage() {
               <AwardsSection data={resumeData.awards} onChange={(val) => handleSimpleChange('awards', val as AwardEntry[])} />
               <LanguagesSection data={resumeData.languages} onChange={(val) => handleSimpleChange('languages', val as LanguageEntry[])} />
               <KeywordsSection resumeData={resumeData} onChange={(val) => handleSimpleChange('keywords', val)} />
-              <AdditionalOptionsSection data={resumeData.additionalOptions} onChange={handleAdditionalOptionsChange} />
+              <AdditionalOptionsSection 
+                data={resumeData.additionalOptions} 
+                onChange={handleAdditionalOptionsChange} 
+                fullName={resumeData.personalInfo.fullName}
+              />
             </div>
           </ScrollArea>
           
@@ -201,4 +205,3 @@ export default function ResumeBuilderPage() {
     </div>
   );
 }
-
