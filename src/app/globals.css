@@ -108,14 +108,14 @@ body {
   display: block;
   border-radius: 50%; /* Makes them circular */
   /* Color for light theme particles, using accent with alpha */
-  background-color: hsl(var(--accent) / 0.15);
+  background-color: hsl(var(--accent) / 0.35); /* Increased opacity */
   animation: animateParticles 25s linear infinite;
   bottom: -50px; /* Start just below the viewport */
 }
 
 /* Color for dark theme particles, using muted with alpha for better subtlety */
 .dark .animated-bg-particles span {
-  background-color: hsl(var(--muted) / 0.2);
+  background-color: hsl(var(--muted) / 0.45); /* Increased opacity */
 }
 
 @keyframes animateParticles {
@@ -128,3 +128,4 @@ body {
     opacity: 0; /* Fade out completely */
   }
 }
+
